@@ -1,5 +1,6 @@
 "use client";
 
+//gghgf
 import React, { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import BranchSelector from "@/components/selectors/BranchSelector";
@@ -96,7 +97,7 @@ const CreateOrderPage = () => {
       unitvalue: "0",
       proddivision: "",
       stock_data: [],
-      pricelist_data: {},
+      // pricelist_data: {},
       Attribute_data: {},
       attribute: {}, // Added attribute
       scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -136,7 +137,7 @@ const CreateOrderPage = () => {
           unitvalue: "0",
           proddivision: product.proddivision || "",
           stock_data: [],
-          pricelist_data: product?.pricelist_data || {},
+          // pricelist_data: product?.pricelist_data || {},
           Attribute_data: product.Attribute_data || {},
           attribute: {}, // Added attribute
           scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -222,13 +223,13 @@ const CreateOrderPage = () => {
   const [isWonLeadModalOpen, setIsWonLeadModalOpen] = useState(false);
 
   // Delivery-related states
-  const [deliveryType, setDeliveryType] = useState("pickup");
+  const [deliveryType, setDeliveryType] = useState("delivery");
   const [billToAddress, setBillToAddress] = useState(null); // Stores address_id
   const [shipToAddress, setShipToAddress] = useState(null); // Stores address_id
   const [isSameAddress, setIsSameAddress] = useState(null); // Stores address_id if "same address" is
 
   // Payment-related states
-  const [selectedTerm, setSelectedTerm] = useState("");
+  const [selectedTerm, setSelectedTerm] = useState("F");
   const [customDays, setCustomDays] = useState("");
 
   // Payment options
@@ -262,6 +263,7 @@ const CreateOrderPage = () => {
       setWonLeadData([]);
       setSelectedWonLead(null);
       setCustomDays("");
+      setSelectedTerm("F");
     }
   }, [selectedContact]);
 
@@ -480,11 +482,11 @@ const CreateOrderPage = () => {
         setSelectedContact(null);
         setOtpValue("");
         setOtpKey("");
-        setDeliveryType("pickup");
+        setDeliveryType("delivery");
         setBillToAddress(null);
         setShipToAddress(null);
         setIsSameAddress(null);
-        setSelectedTerm("");
+        setSelectedTerm("F");
         setCustomDays("");
         setContactBillingAddresses([]);
         setSelectedWonLead(null);
@@ -553,11 +555,11 @@ const CreateOrderPage = () => {
         setSelectedContact(null);
         setOtpValue("");
         setOtpKey("");
-        setDeliveryType("pickup");
+        setDeliveryType("delivery");
         setBillToAddress(null);
         setShipToAddress(null);
         setIsSameAddress(null);
-        setSelectedTerm("");
+        setSelectedTerm("F");
         setCustomDays("");
         setContactBillingAddresses([]);
         setSelectedWonLead(null);
@@ -813,59 +815,59 @@ const CreateOrderPage = () => {
   });
 
   // Fetch contact data using useQuery
-   const {
-     data: contactData,
-     error: contactError,
-     isLoading: contactLoading,
-   } = useQuery({
-     queryKey: [
-       "contactList",
-       token,
-       orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
-     ],
-     queryFn: () =>
-       OrderService.getContactRawcontactAutoComplete(
-         token,
-         orderIdParam ? salesOrderDetails?.company_id : selectedCompany
-       ),
-     enabled:
-       !!token &&
-       (orderIdParam ? !!salesOrderDetails?.company_id : !!selectedCompany),
-     staleTime: 5 * 60 * 1000,
-     cacheTime: 10 * 60 * 1000,
-   });
- 
-   // Fetch product data
-   const {
-     data: productData,
-     error: productError,
-     isLoading: productLoading,
-   } = useQuery({
-     queryKey: [
-       "productList",
-       token,
-       orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
-       orderIdParam ? salesOrderDetails?.division_id : selectedDivision,
-       user?.id,
-     ],
-     queryFn: () =>
-       leadService.getProductBasedOnCompany(
-         token,
-         orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
-         orderIdParam ? salesOrderDetails?.division_id : selectedDivision,
-         user?.id // Passing employee ID
-       ),
-     enabled:
-       !!token &&
-       !!user?.id &&
-       (user?.isEmployee
-         ? !!(orderIdParam ? salesOrderDetails?.company_id : selectedCompany)
-         : true),
-     staleTime: 5 * 60 * 1000,
-     cacheTime: 10 * 60 * 1000,
-     retry: false,
-     refetchOnWindowFocus: false,
-   });
+  const {
+    data: contactData,
+    error: contactError,
+    isLoading: contactLoading,
+  } = useQuery({
+    queryKey: [
+      "contactList",
+      token,
+      orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
+    ],
+    queryFn: () =>
+      OrderService.getContactRawcontactAutoComplete(
+        token,
+        orderIdParam ? salesOrderDetails?.company_id : selectedCompany
+      ),
+    enabled:
+      !!token &&
+      (orderIdParam ? !!salesOrderDetails?.company_id : !!selectedCompany),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+  });
+
+  // Fetch product data
+  const {
+    data: productData,
+    error: productError,
+    isLoading: productLoading,
+  } = useQuery({
+    queryKey: [
+      "productList",
+      token,
+      orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
+      orderIdParam ? salesOrderDetails?.division_id : selectedDivision,
+      user?.id,
+    ],
+    queryFn: () =>
+      leadService.getProductBasedOnCompany(
+        token,
+        orderIdParam ? salesOrderDetails?.company_id : selectedCompany,
+        orderIdParam ? salesOrderDetails?.division_id : selectedDivision,
+        user?.id // Passing employee ID
+      ),
+    enabled:
+      !!token &&
+      !!user?.id &&
+      (user?.isEmployee
+        ? !!(orderIdParam ? salesOrderDetails?.company_id : selectedCompany)
+        : true),
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
+    retry: false,
+    refetchOnWindowFocus: false,
+  });
 
   // Fetch company details
   const {
@@ -1074,7 +1076,7 @@ const CreateOrderPage = () => {
 
   useEffect(() => {
     if (user?.isEmployee && !selectedContact) {
-      setDeliveryType("pickup");
+      setDeliveryType("delivery");
       setBillToAddress(null);
       setShipToAddress(null);
       setIsSameAddress(null);
@@ -1298,7 +1300,7 @@ const CreateOrderPage = () => {
         unitvalue: "0",
         proddivision: "",
         stock_data: [],
-        pricelist_data: {},
+        // pricelist_data: {},
         Attribute_data: {},
         attribute: {}, // Added attribute
         scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -1471,7 +1473,7 @@ const CreateOrderPage = () => {
                   orderIdParam={orderIdParam}
                   salesOrderDetails={salesOrderDetails}
                 />
-                {deliveryType == "delivery" && (
+                {deliveryType == "delivery" && selectedContact && (
                   <div className="mt-4">
                     <Button
                       className="h-9 px-4 bg-[#287f71] hover:bg-[#20665a] text-white"

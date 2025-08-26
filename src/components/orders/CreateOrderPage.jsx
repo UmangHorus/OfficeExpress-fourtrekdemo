@@ -98,6 +98,7 @@ const CreateOrderPage = () => {
       proddivision: "",
       stock_data: [],
       // pricelist_data: {},
+      price_list_flg: false, // Added price_list_flg
       Attribute_data: {},
       attribute: {}, // Added attribute
       scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -138,6 +139,7 @@ const CreateOrderPage = () => {
           proddivision: product.proddivision || "",
           stock_data: [],
           // pricelist_data: product?.pricelist_data || {},
+          price_list_flg: product?.price_list_flg || false, // Added price_list_flg
           Attribute_data: product.Attribute_data || {},
           attribute: {}, // Added attribute
           scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -375,6 +377,28 @@ const CreateOrderPage = () => {
       }
     }
   }, [salesOrderDetails, contactList, orderIdParam]);
+
+  useEffect(() => {
+  if (salesOrderDetails && orderIdParam) {
+    // Check if billing and shipping address IDs exist
+    if (salesOrderDetails.billing_address_id && salesOrderDetails.shipping_address_id) {
+      // Compare billing and shipping address IDs
+      const isSame = salesOrderDetails.billing_address_id == salesOrderDetails.shipping_address_id;
+      
+      // If addresses are the same, set isSameAddress, billToAddress, and shipToAddress to the same ID
+      if (isSame) {
+        setIsSameAddress(salesOrderDetails.billing_address_id);
+        setBillToAddress(null);
+        setShipToAddress(null);
+      } else {
+        // If addresses are different, set billToAddress and shipToAddress to their respective IDs
+        setIsSameAddress(null); // or set to another value like "" or false, depending on your requirement
+        setBillToAddress(salesOrderDetails.billing_address_id);
+        setShipToAddress(salesOrderDetails.shipping_address_id);
+      }
+    }
+  }
+}, [salesOrderDetails, orderIdParam]);
 
   // OTP state and create lead state start
   const [otpValue, setOtpValue] = useState("");
@@ -1301,6 +1325,7 @@ const CreateOrderPage = () => {
         proddivision: "",
         stock_data: [],
         // pricelist_data: {},
+        price_list_flg: false, // Added price_list_flg
         Attribute_data: {},
         attribute: {}, // Added attribute
         scheduleDate: format(new Date(), "yyyy-MM-dd"),
@@ -1473,29 +1498,29 @@ const CreateOrderPage = () => {
                   orderIdParam={orderIdParam}
                   salesOrderDetails={salesOrderDetails}
                 />
-                {deliveryType == "delivery" && selectedContact && (
-                  <div className="mt-4">
-                    <Button
-                      className="h-9 px-4 bg-[#287f71] hover:bg-[#20665a] text-white"
-                      type="button"
-                      onClick={() => setIsAddressModalOpen(true)}
-                    >
-                      Add Address
-                    </Button>
-                    <Modal
-                      open={isAddressModalOpen}
-                      onOpenChange={setIsAddressModalOpen}
-                      title="Add New Address"
-                    >
-                      <AddressForm
-                        onAddAddressSubmit={handleAddAddress}
-                        onCancel={() => setIsAddressModalOpen(false)}
-                        addressType={addressType}
-                        isSubmitting={addAddressMutation.isPending}
-                      />
-                    </Modal>
-                  </div>
-                )}
+                {deliveryType == "delivery" && selectedContact && !orderIdParam && (
+  <div className="mt-4">
+    <Button
+      className="h-9 px-4 bg-[#287f71] hover:bg-[#20665a] text-white"
+      type="button"
+      onClick={() => setIsAddressModalOpen(true)}
+    >
+      Add Address
+    </Button>
+    <Modal
+      open={isAddressModalOpen}
+      onOpenChange={setIsAddressModalOpen}
+      title="Add New Address"
+    >
+      <AddressForm
+        onAddAddressSubmit={handleAddAddress}
+        onCancel={() => setIsAddressModalOpen(false)}
+        addressType={addressType}
+        isSubmitting={addAddressMutation.isPending}
+      />
+    </Modal>
+  </div>
+)}
               </div>
             </div>
           </form>

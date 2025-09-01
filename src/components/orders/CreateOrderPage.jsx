@@ -379,26 +379,26 @@ const CreateOrderPage = () => {
   }, [salesOrderDetails, contactList, orderIdParam]);
 
   useEffect(() => {
-  if (salesOrderDetails && orderIdParam) {
-    // Check if billing and shipping address IDs exist
-    if (salesOrderDetails.billing_address_id && salesOrderDetails.shipping_address_id) {
-      // Compare billing and shipping address IDs
-      const isSame = salesOrderDetails.billing_address_id == salesOrderDetails.shipping_address_id;
-      
-      // If addresses are the same, set isSameAddress, billToAddress, and shipToAddress to the same ID
-      if (isSame) {
-        setIsSameAddress(salesOrderDetails.billing_address_id);
-        setBillToAddress(null);
-        setShipToAddress(null);
-      } else {
-        // If addresses are different, set billToAddress and shipToAddress to their respective IDs
-        setIsSameAddress(null); // or set to another value like "" or false, depending on your requirement
-        setBillToAddress(salesOrderDetails.billing_address_id);
-        setShipToAddress(salesOrderDetails.shipping_address_id);
+    if (salesOrderDetails && orderIdParam) {
+      // Check if billing and shipping address IDs exist
+      if (salesOrderDetails.billing_address_id && salesOrderDetails.shipping_address_id) {
+        // Compare billing and shipping address IDs
+        const isSame = salesOrderDetails.billing_address_id == salesOrderDetails.shipping_address_id;
+
+        // If addresses are the same, set isSameAddress, billToAddress, and shipToAddress to the same ID
+        if (isSame) {
+          setIsSameAddress(salesOrderDetails.billing_address_id);
+          setBillToAddress(null);
+          setShipToAddress(null);
+        } else {
+          // If addresses are different, set billToAddress and shipToAddress to their respective IDs
+          setIsSameAddress(null); // or set to another value like "" or false, depending on your requirement
+          setBillToAddress(salesOrderDetails.billing_address_id);
+          setShipToAddress(salesOrderDetails.shipping_address_id);
+        }
       }
     }
-  }
-}, [salesOrderDetails, orderIdParam]);
+  }, [salesOrderDetails, orderIdParam]);
 
   // OTP state and create lead state start
   const [otpValue, setOtpValue] = useState("");
@@ -640,8 +640,7 @@ const CreateOrderPage = () => {
       for (const product of formValues) {
         if (!product.productid || product.productid == "") {
           toast.error(
-            `Please select a valid product for ${
-              product.productname || "item"
+            `Please select a valid product for ${product.productname || "item"
             }`,
             {
               duration: 2000,
@@ -660,8 +659,7 @@ const CreateOrderPage = () => {
             isNaN(Number(product.productqty))
           ) {
             toast.error(
-              `Product ${
-                product.productname || "item"
+              `Product ${product.productname || "item"
               }: Primary quantity must be greater than 0`,
               {
                 duration: 2000,
@@ -678,8 +676,7 @@ const CreateOrderPage = () => {
             isNaN(Number(product.SecQtyTotal))
           ) {
             toast.error(
-              `Product ${
-                product.productname || "item"
+              `Product ${product.productname || "item"
               }: Secondary quantity must be greater than 0`,
               {
                 duration: 2000,
@@ -696,8 +693,7 @@ const CreateOrderPage = () => {
             isNaN(Number(product.productqty))
           ) {
             toast.error(
-              `Product ${
-                product.productname || "item"
+              `Product ${product.productname || "item"
               }: Quantity must be greater than 0`,
               {
                 duration: 2000,
@@ -917,13 +913,13 @@ const CreateOrderPage = () => {
       orderIdParam
         ? salesOrderDetails?.contact_id
         : user?.isEmployee
-        ? selectedContact?.id
-        : user?.id,
+          ? selectedContact?.id
+          : user?.id,
       orderIdParam
         ? salesOrderDetails?.contact_type
         : user?.isEmployee
-        ? selectedContact?.type
-        : user?.type,
+          ? selectedContact?.type
+          : user?.type,
       token,
     ],
     queryFn: () =>
@@ -932,21 +928,21 @@ const CreateOrderPage = () => {
         orderIdParam
           ? salesOrderDetails.contact_id
           : user?.isEmployee
-          ? selectedContact.id
-          : user.id,
+            ? selectedContact.id
+            : user.id,
         orderIdParam
           ? salesOrderDetails.contact_type
           : user?.isEmployee
-          ? selectedContact.type
-          : user.type
+            ? selectedContact.type
+            : user.type
       ),
     enabled:
       !!token &&
       (orderIdParam
         ? !!salesOrderDetails?.contact_id && !!salesOrderDetails?.contact_type
         : user?.isEmployee
-        ? !!selectedContact?.id && !!selectedContact?.type
-        : !!user?.id && !!user?.type),
+          ? !!selectedContact?.id && !!selectedContact?.type
+          : !!user?.id && !!user?.type),
     staleTime: 0,
     cacheTime: 0,
     refetchOnMount: "always",
@@ -1499,28 +1495,28 @@ const CreateOrderPage = () => {
                   salesOrderDetails={salesOrderDetails}
                 />
                 {deliveryType == "delivery" && selectedContact && !orderIdParam && (
-  <div className="mt-4">
-    <Button
-      className="h-9 px-4 bg-[#287f71] hover:bg-[#20665a] text-white"
-      type="button"
-      onClick={() => setIsAddressModalOpen(true)}
-    >
-      Add Address
-    </Button>
-    <Modal
-      open={isAddressModalOpen}
-      onOpenChange={setIsAddressModalOpen}
-      title="Add New Address"
-    >
-      <AddressForm
-        onAddAddressSubmit={handleAddAddress}
-        onCancel={() => setIsAddressModalOpen(false)}
-        addressType={addressType}
-        isSubmitting={addAddressMutation.isPending}
-      />
-    </Modal>
-  </div>
-)}
+                  <div className="mt-4">
+                    <Button
+                      className="h-9 px-4 bg-[#287f71] hover:bg-[#20665a] text-white"
+                      type="button"
+                      onClick={() => setIsAddressModalOpen(true)}
+                    >
+                      Add Address
+                    </Button>
+                    <Modal
+                      open={isAddressModalOpen}
+                      onOpenChange={setIsAddressModalOpen}
+                      title="Add New Address"
+                    >
+                      <AddressForm
+                        onAddAddressSubmit={handleAddAddress}
+                        onCancel={() => setIsAddressModalOpen(false)}
+                        addressType={addressType}
+                        isSubmitting={addAddressMutation.isPending}
+                      />
+                    </Modal>
+                  </div>
+                )}
               </div>
             </div>
           </form>
@@ -1576,13 +1572,13 @@ const CreateOrderPage = () => {
         disabled={
           orderIdParam
             ? user?.isEmployee && enabledOtpPortal == 0
-              ? saveOrderMutation.isPending
+              ? saveEditOrderMutation.isPending
               : generateOtpMutation.isPending
             : user?.isEmployee
-            ? enabledOtpPortal == 0
-              ? saveOrderMutation.isPending
-              : generateOtpMutation.isPending
-            : saveOrderMutation.isPending
+              ? enabledOtpPortal == 0
+                ? saveOrderMutation.isPending
+                : generateOtpMutation.isPending
+              : saveOrderMutation.isPending
         }
         onClick={handleCreateOrder}
       >

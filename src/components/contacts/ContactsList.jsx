@@ -1029,7 +1029,7 @@ const ContactList = () => {
                 Visit status: <span className="">Pending check-out</span> for{" "}
                 <span className="underline">{visitorFound[0].reference_name}</span>
                 {" "}(
-                {visitorFound[0].reference_type == "1" ? "Customer" : "RC"})
+                {visitorFound[0].reference_type == "1" ? "C" : "RC"})
                 {visitorFound[0].reference_mobile_no && (
                   <>, Mobile: {visitorFound[0].reference_mobile_no}</>
                 )}
@@ -1041,7 +1041,7 @@ const ContactList = () => {
                   Reference ID: {visitorFound[0].reference_id}
                 </span>
                 (Type:{" "}
-                {visitorFound[0].reference_type == "1" ? "Customer" : "RC"})
+                {visitorFound[0].reference_type == "1" ? "C" : "RC"})
               </>
             )}
           </p>
